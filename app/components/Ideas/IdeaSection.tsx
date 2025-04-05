@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 type Item = {
   text: string;
-
+  favorite: boolean;
   done: boolean;
 };
 
@@ -16,7 +16,10 @@ export const IdeaSection = () => {
 
   const addIdea = () => {
     if (!newIdea.trim()) return;
-    setIdeas((prev) => [...prev, { text: newIdea, done: false }]);
+    setIdeas((prev) => [
+      ...prev,
+      { text: newIdea, favorite: false, done: false },
+    ]);
     setNewIdea("");
   };
 
@@ -42,6 +45,14 @@ export const IdeaSection = () => {
       )
     );
     cancelEdit();
+  };
+
+  const toggleFavorite = (index: number) => {
+    setIdeas((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, favorite: !item.favorite } : item
+      )
+    );
   };
 
   const toggleDone = (index: number) => {
@@ -113,6 +124,14 @@ export const IdeaSection = () => {
                     {item.text}
                   </p>
                   <div className="flex gap-2 ml-2">
+                    <button
+                      onClick={() => toggleFavorite(index)}
+                      className={`${
+                        item.favorite ? "text-yellow-500" : "text-gray-400"
+                      } hover:text-yellow-600`}
+                    >
+                      ⭐
+                    </button>
                     <button
                       onClick={() => toggleDone(index)}
                       className={`${
