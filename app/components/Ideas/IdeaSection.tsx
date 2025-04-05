@@ -124,14 +124,22 @@ export const IdeaSection = () => {
                     {item.text}
                   </p>
                   <div className="flex gap-2 ml-2">
-                    <button
+                    {/* Animated Favorite Button */}
+                    <motion.button
                       onClick={() => toggleFavorite(index)}
-                      className={`text-xl transition ${
-                        item.favorite ? "text-yellow-500" : "text-gray-400"
-                      }`}
+                      className={`text-xl`}
+                      whileTap={{ scale: 1.3 }}
+                      transition={{ type: "spring", stiffness: 300 }}
                     >
-                      {item.favorite ? "★" : "☆"}
-                    </button>
+                      <span
+                        className={`transition ${
+                          item.favorite ? "text-yellow-500" : "text-gray-400"
+                        }`}
+                      >
+                        {item.favorite ? "★" : "☆"}
+                      </span>
+                    </motion.button>
+
                     <button
                       onClick={() => toggleDone(index)}
                       className={`${
