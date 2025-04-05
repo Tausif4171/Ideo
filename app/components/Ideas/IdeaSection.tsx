@@ -128,7 +128,7 @@ export const IdeaSection = () => {
                     <motion.button
                       onClick={() => toggleFavorite(index)}
                       className={`text-xl`}
-                      whileTap={{ scale: 1.3 }}
+                      whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
                       <span
