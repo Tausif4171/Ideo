@@ -76,7 +76,7 @@ export const IdeaSection = () => {
         />
         <button
           onClick={addIdea}
-          className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
         >
           Add
         </button>
@@ -102,13 +102,13 @@ export const IdeaSection = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={updateIdea}
-                      className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                      className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                     >
                       Save
                     </button>
                     <button
                       onClick={cancelEdit}
-                      className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                      className="bg-gray-400 cursor-pointer text-white px-3 py-1 rounded hover:bg-gray-500"
                     >
                       Cancel
                     </button>
@@ -127,7 +127,7 @@ export const IdeaSection = () => {
                     {/* Animated Favorite Button */}
                     <motion.button
                       onClick={() => toggleFavorite(index)}
-                      className={`text-xl`}
+                      className={`text-xl cursor-pointer`}
                       whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
@@ -144,19 +144,19 @@ export const IdeaSection = () => {
                       onClick={() => toggleDone(index)}
                       className={`${
                         item.done ? "text-green-600" : "text-gray-400"
-                      } hover:text-green-700`}
+                      } hover:text-green-700 cursor-pointer`}
                     >
                       ✔
                     </button>
                     <button
                       onClick={() => startEdit(index)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-blue-600 hover:text-blue-800 cursor-pointer"
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => deleteIdea(index)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 cursor-pointer"
                     >
                       🗑️
                     </button>
