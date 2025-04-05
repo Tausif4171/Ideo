@@ -35,9 +35,8 @@ export const IdeaSection = () => {
 
   const updateIdea = () => {
     if (editingIndex === null || !editText.trim()) return;
-    const updatedIdeas = [...ideas];
-    updatedIdeas[editingIndex] = editText;
-    setIdeas(updatedIdeas);
+    ideas[editingIndex] = editText;
+    setIdeas(ideas);
     cancelEdit();
   };
 
