@@ -126,11 +126,11 @@ export const IdeaSection = () => {
                   <div className="flex gap-2 ml-2">
                     <button
                       onClick={() => toggleFavorite(index)}
-                      className={`${
+                      className={`text-xl transition ${
                         item.favorite ? "text-yellow-500" : "text-gray-400"
-                      } hover:text-yellow-600`}
+                      }`}
                     >
-                      ⭐
+                      {item.favorite ? "★" : "☆"}
                     </button>
                     <button
                       onClick={() => toggleDone(index)}
