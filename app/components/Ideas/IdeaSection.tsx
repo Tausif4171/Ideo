@@ -2,30 +2,31 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+type Item = {
+  text: string;
+
+  done: boolean;
+};
+
 export const IdeaSection = () => {
-  const [ideas, setIdeas] = useState<string[]>([]);
+  const [ideas, setIdeas] = useState<Item[]>([]);
   const [newIdea, setNewIdea] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
 
-  // CREATE
   const addIdea = () => {
     if (!newIdea.trim()) return;
-    setIdeas((prev) => [...prev, newIdea]);
+    setIdeas((prev) => [...prev, { text: newIdea, done: false }]);
     setNewIdea("");
   };
 
-  // READ: rendering below as a list
-
-  // DELETE
   const deleteIdea = (index: number) => {
     setIdeas((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // UPDATE
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditText(ideas[index]);
+    setEditText(ideas[index].text);
   };
 
   const cancelEdit = () => {
@@ -35,16 +36,26 @@ export const IdeaSection = () => {
 
   const updateIdea = () => {
     if (editingIndex === null || !editText.trim()) return;
-    ideas[editingIndex] = editText;
-    setIdeas(ideas);
+    setIdeas((prev) =>
+      prev.map((item, i) =>
+        i === editingIndex ? { ...item, text: editText } : item
+      )
+    );
     cancelEdit();
+  };
+
+  const toggleDone = (index: number) => {
+    setIdeas((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, done: !item.done } : item
+      )
+    );
   };
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4">💡 Ideas</h2>
 
-      {/* Input Field */}
       <div className="flex gap-2 mb-4">
         <input
           value={newIdea}
@@ -60,10 +71,9 @@ export const IdeaSection = () => {
         </button>
       </div>
 
-      {/* List */}
       <ul className="space-y-3">
         <AnimatePresence>
-          {ideas.map((idea, index) => (
+          {ideas.map((item, index) => (
             <motion.li
               key={index}
               initial={{ opacity: 0, y: 10 }}
@@ -95,8 +105,22 @@ export const IdeaSection = () => {
                 </div>
               ) : (
                 <>
-                  <p className="w-full">{idea}</p>
+                  <p
+                    className={`w-full ${
+                      item.done ? "line-through text-gray-500" : ""
+                    }`}
+                  >
+                    {item.text}
+                  </p>
                   <div className="flex gap-2 ml-2">
+                    <button
+                      onClick={() => toggleDone(index)}
+                      className={`${
+                        item.done ? "text-green-600" : "text-gray-400"
+                      } hover:text-green-700`}
+                    >
+                      ✔
+                    </button>
                     <button
                       onClick={() => startEdit(index)}
                       className="text-blue-600 hover:text-blue-800"
