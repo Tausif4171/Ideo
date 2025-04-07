@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Item = {
@@ -62,6 +62,15 @@ export const IdeaSection = () => {
       )
     );
   };
+
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      const res = await fetch("/api/ideas");
+      const data = await res.json();
+      setIdeas(data);
+    };
+    fetchIdeas();
+  }, []);
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
