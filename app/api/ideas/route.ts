@@ -8,3 +8,10 @@ export async function POST(req: Request) {
   const newIdea = await Idea.create(data);
   return Response.json(newIdea);
 }
+
+export async function GET() {
+  await connectToDB();
+
+  const ideas = await Idea.find();
+  return Response.json(ideas);
+}
