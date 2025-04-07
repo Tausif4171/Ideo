@@ -14,12 +14,23 @@ export const IdeaSection = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
 
-  const addIdea = () => {
+  const addIdea = async () => {
     if (!newIdea.trim()) return;
-    setIdeas((prev) => [
-      ...prev,
-      { text: newIdea, favorite: false, done: false },
-    ]);
+
+    const res = await fetch("/api/ideas", {
+      method: "POST",
+      body: JSON.stringify({
+        text: newIdea,
+        favorite: false,
+        done: false,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    setIdeas((prev) => [...prev, data]);
     setNewIdea("");
   };
 
