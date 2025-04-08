@@ -131,8 +131,8 @@ export const FeaturesSection = () => {
                     {/* Animated Favorite Button */}
                     <motion.button
                       onClick={() => toggleFavorite(index)}
-                      className={`text-xl`}
-                      whileTap={{ scale: 1.3 }}
+                      className={`text-xl cursor-pointer`}
+                      whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
                       <span
