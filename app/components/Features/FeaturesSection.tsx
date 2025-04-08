@@ -2,8 +2,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+type Item = {
+  text: string;
+
+  done: boolean;
+};
+
 export const FeaturesSection = () => {
-  const [features, setFeatures] = useState<string[]>([]);
+  const [features, setFeatures] = useState<Item[]>([]);
   const [newFeature, setNewFeature] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
@@ -11,14 +17,14 @@ export const FeaturesSection = () => {
   // CREATE
   const addIdea = () => {
     if (!newFeature.trim()) return;
-    setFeatures((prev) => [...prev, newFeature]);
+    setFeatures((prev) => [...prev, { text: newFeature, done: false }]);
     setNewFeature("");
   };
 
   // UPDATE
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditText(features[index]);
+    setEditText(features[index].text);
   };
 
   // DELETE
@@ -33,9 +39,20 @@ export const FeaturesSection = () => {
 
   const updateIdea = () => {
     if (editingIndex === null || !editText.trim()) return;
-    features[editingIndex] = editText;
-    setFeatures(features);
+    setFeatures((prev) =>
+      prev.map((item, i) =>
+        i === editingIndex ? { ...item, text: editText } : item
+      )
+    );
     cancelEdit();
+  };
+
+  const toggleDone = (index: number) => {
+    setFeatures((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, done: !item.done } : item
+      )
+    );
   };
 
   return (
@@ -60,7 +77,7 @@ export const FeaturesSection = () => {
       {/* List */}
       <ul className="space-y-3">
         <AnimatePresence>
-          {features.map((idea, index) => (
+          {features.map((item, index) => (
             <motion.li
               key={index}
               initial={{ opacity: 0, y: 10 }}
@@ -92,8 +109,22 @@ export const FeaturesSection = () => {
                 </div>
               ) : (
                 <>
-                  <p className="w-full">{idea}</p>
+                  <p
+                    className={`w-full ${
+                      item.done ? "line-through text-gray-500" : ""
+                    }`}
+                  >
+                    {item.text}
+                  </p>
                   <div className="flex gap-2 ml-2">
+                    <button
+                      onClick={() => toggleDone(index)}
+                      className={`${
+                        item.done ? "text-green-600" : "text-gray-400"
+                      } hover:text-green-700 cursor-pointer`}
+                    >
+                      ✔
+                    </button>
                     <button
                       onClick={() => startEdit(index)}
                       className="text-blue-600 hover:text-blue-800 cursor-pointer"
