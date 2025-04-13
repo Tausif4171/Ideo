@@ -9,3 +9,10 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const updatedIdea = await Idea.findByIdAndUpdate(params.id, updates, { new: true });
   return NextResponse.json(updatedIdea);
 }
+
+// DELETE an idea by ID
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  await connectToDB();
+  await Idea.findByIdAndDelete(params.id);
+  return NextResponse.json({ message: "Idea deleted" });
+}
