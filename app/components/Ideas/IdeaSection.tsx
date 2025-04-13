@@ -66,12 +66,16 @@ export const IdeaSection = () => {
     cancelEdit();
   };
 
-  const toggleFavorite = (index: number) => {
-    setIdeas((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, favorite: !item.favorite } : item
-      )
-    );
+  const toggleFavorite = async (id: string, current: boolean) => {
+    const res = await fetch(`/api/ideas/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ favorite: !current }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updated = await res.json();
+    setIdeas((prev) => prev.map((idea) => (idea._id === id ? updated : idea)));
   };
 
   const toggleDone = (index: number) => {
@@ -154,7 +158,9 @@ export const IdeaSection = () => {
                   <div className="flex gap-2 ml-2">
                     {/* Animated Favorite Button */}
                     <motion.button
-                      onClick={() => toggleFavorite(index)}
+                      onClick={() =>
+                        toggleFavorite(ideas[index]._id, item.favorite)
+                      }
                       className={`text-xl cursor-pointer`}
                       whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
