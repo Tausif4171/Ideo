@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import TextareaAutosize from "react-textarea-autosize";
 
 type Item = {
+  _id: string;
   text: string;
   favorite: boolean;
   done: boolean;
@@ -14,6 +15,7 @@ export const IdeaSection = () => {
   const [newIdea, setNewIdea] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
+  console.log(ideas);
 
   const addIdea = async () => {
     if (!newIdea.trim()) return;
@@ -49,13 +51,17 @@ export const IdeaSection = () => {
     setEditText("");
   };
 
-  const updateIdea = () => {
-    if (editingIndex === null || !editText.trim()) return;
-    setIdeas((prev) =>
-      prev.map((item, i) =>
-        i === editingIndex ? { ...item, text: editText } : item
-      )
-    );
+  const updateIdea = async (id: string) => {
+    if (!editText.trim()) return;
+    const res = await fetch(`/api/ideas/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ text: editText }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updated = await res.json();
+    setIdeas((prev) => prev.map((idea) => (idea._id === id ? updated : idea)));
     cancelEdit();
   };
 
@@ -122,7 +128,7 @@ export const IdeaSection = () => {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={updateIdea}
+                      onClick={() => updateIdea(ideas[index]._id)}
                       className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                     >
                       Save
