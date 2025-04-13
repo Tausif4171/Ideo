@@ -37,8 +37,9 @@ export const IdeaSection = () => {
     setNewIdea("");
   };
 
-  const deleteIdea = (index: number) => {
-    setIdeas((prev) => prev.filter((_, i) => i !== index));
+  const deleteIdea = async (id: string) => {
+    await fetch(`/api/ideas/${id}`, { method: "DELETE" });
+    setIdeas((prev) => prev.filter((idea) => idea._id !== id));
   };
 
   const startEdit = (index: number) => {
@@ -182,7 +183,7 @@ export const IdeaSection = () => {
                       ✏️
                     </button>
                     <button
-                      onClick={() => deleteIdea(index)}
+                      onClick={() => deleteIdea(ideas[index]._id)}
                       className="text-red-600 hover:text-red-800 cursor-pointer"
                     >
                       🗑️
