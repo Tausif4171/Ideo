@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import TextareaAutosize from "react-textarea-autosize";
 
 type Item = {
   text: string;
@@ -114,7 +115,7 @@ export const IdeaSection = () => {
             >
               {editingIndex === index ? (
                 <div className="w-full flex flex-col gap-2">
-                  <input
+                  <TextareaAutosize
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
                     className="w-full px-3 py-1 border border-gray-400 rounded"
