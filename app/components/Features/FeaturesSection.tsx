@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import TextareaAutosize from "react-textarea-autosize";
 
 type Item = {
   text: string;
@@ -71,11 +72,11 @@ export const FeaturesSection = () => {
       <h2 className="text-2xl font-bold mb-4">💡 Features</h2>
       {/* Input Field */}
       <div className="flex gap-2 mb-4">
-        <input
+        <TextareaAutosize
           value={newFeature}
           onChange={(e) => setNewFeature(e.target.value)}
           placeholder="Add a new feature..."
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg resize-none"
         />
         <button
           onClick={addIdea}
@@ -98,10 +99,10 @@ export const FeaturesSection = () => {
             >
               {editingIndex === index ? (
                 <div className="w-full flex flex-col gap-2">
-                  <input
+                  <TextareaAutosize
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
-                    className="w-full px-3 py-1 border border-gray-400 rounded"
+                    className="w-full px-3 py-1 border border-gray-400 rounded resize-none"
                   />
                   <div className="flex gap-2">
                     <button
