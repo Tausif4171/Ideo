@@ -118,7 +118,7 @@ export const IdeaSection = () => {
                   <TextareaAutosize
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
-                    className="w-full px-3 py-1 border border-gray-400 rounded"
+                    className="w-full px-3 py-1 border border-gray-400 rounded resize-none"
                   />
                   <div className="flex gap-2">
                     <button
