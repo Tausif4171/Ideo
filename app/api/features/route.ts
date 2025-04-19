@@ -8,3 +8,9 @@ export  async function POST(req: Request) {
   const newFeature = await Feature.create(data);
   return Response.json(newFeature);
 }
+
+export async function GET(){
+    await connectToDB();
+    const features = await Feature.find();
+    return Response.json(features);
+}
