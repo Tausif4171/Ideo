@@ -1,0 +1,10 @@
+import { connectToDB } from "@/app/lib/mongodb";
+import { Feature } from "@/app/lib/models/feature";  
+
+export  async function POST(req: Request) {
+  await connectToDB();
+
+  const data = await req.json();
+  const newFeature = await Feature.create(data);
+  return Response.json(newFeature);
+}
