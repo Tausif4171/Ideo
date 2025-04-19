@@ -9,3 +9,10 @@ export async  function PATCH(req:Request,{params}:{params:{id:string}}){
     const updatedFeature = await Feature.findByIdAndUpdate(params.id,updates,{new:true});
     return NextResponse.json(updatedFeature);
 }
+
+// DELETE an feature by ID
+export async function DELETE({ params }: { params: { id: string } }) {
+  await connectToDB();
+  await Feature.findByIdAndDelete(params.id);
+  return NextResponse.json({ message: "Feature deleted" });
+}
