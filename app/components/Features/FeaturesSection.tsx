@@ -16,7 +16,7 @@ export const FeaturesSection = () => {
   const [editText, setEditText] = useState("");
 
   // CREATE
-  const addIdea = async () => {
+  const addFeature = async () => {
     if (!newFeature.trim()) return;
     const res = await fetch("/api/features", {
       method: "POST",
@@ -41,7 +41,7 @@ export const FeaturesSection = () => {
   };
 
   // DELETE
-  const deleteIdea = (index: number) => {
+  const deleteFeature = (index: number) => {
     setFeatures((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -50,7 +50,7 @@ export const FeaturesSection = () => {
     setEditText("");
   };
 
-  const updateIdea = () => {
+  const updateFeature = () => {
     if (editingIndex === null || !editText.trim()) return;
     setFeatures((prev) =>
       prev.map((item, i) =>
@@ -77,12 +77,12 @@ export const FeaturesSection = () => {
   };
 
   useEffect(() => {
-    const fetchIdeas = async () => {
+    const fetchFeatures = async () => {
       const res = await fetch("/api/features");
       const data = await res.json();
       setFeatures(data);
     };
-    fetchIdeas();
+    fetchFeatures();
   }, []);
 
   return (
@@ -97,7 +97,7 @@ export const FeaturesSection = () => {
           className="flex-1 px-3 py-2 border border-gray-300 rounded-lg resize-none"
         />
         <button
-          onClick={addIdea}
+          onClick={addFeature}
           className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
         >
           Add
@@ -124,7 +124,7 @@ export const FeaturesSection = () => {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={updateIdea}
+                      onClick={updateFeature}
                       className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                     >
                       Save
@@ -178,7 +178,7 @@ export const FeaturesSection = () => {
                       ✏️
                     </button>
                     <button
-                      onClick={() => deleteIdea(index)}
+                      onClick={() => deleteFeature(index)}
                       className="text-red-600 hover:text-red-800 cursor-pointer"
                     >
                       🗑️
