@@ -11,7 +11,7 @@ export async  function PATCH(req:Request,{params}:{params:{id:string}}){
 }
 
 // DELETE an feature by ID
-export async function DELETE({ params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   await connectToDB();
   await Feature.findByIdAndDelete(params.id);
   return NextResponse.json({ message: "Feature deleted" });
