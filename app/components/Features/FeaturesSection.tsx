@@ -42,8 +42,9 @@ export const FeaturesSection = () => {
   };
 
   // DELETE
-  const deleteFeature = (index: number) => {
-    setFeatures((prev) => prev.filter((_, i) => i !== index));
+  const deleteFeature = async (id: string) => {
+    await fetch(`/api/features/${id}`, { method: "DELETE" });
+    setFeatures((prev) => prev.filter((feature) => feature._id !== id));
   };
 
   const cancelEdit = () => {
@@ -185,7 +186,7 @@ export const FeaturesSection = () => {
                       ✏️
                     </button>
                     <button
-                      onClick={() => deleteFeature(index)}
+                      onClick={() => deleteFeature(features[index]._id)}
                       className="text-red-600 hover:text-red-800 cursor-pointer"
                     >
                       🗑️
