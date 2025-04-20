@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -16,12 +16,21 @@ export const FeaturesSection = () => {
   const [editText, setEditText] = useState("");
 
   // CREATE
-  const addIdea = () => {
+  const addIdea = async () => {
     if (!newFeature.trim()) return;
-    setFeatures((prev) => [
-      ...prev,
-      { text: newFeature, favorite: false, done: false },
-    ]);
+    const res = await fetch("/api/features", {
+      method: "POST",
+      body: JSON.stringify({
+        text: newFeature,
+        favorite: false,
+        done: false,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    setFeatures((prev) => [...prev, data]);
     setNewFeature("");
   };
 
