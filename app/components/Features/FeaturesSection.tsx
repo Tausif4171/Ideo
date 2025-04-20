@@ -83,11 +83,17 @@ export const FeaturesSection = () => {
     );
   };
 
-  const toggleDone = (index: number) => {
+  const toggleDone = async (id: string, current: boolean) => {
+    const res = await fetch(`/api/features/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ done: !current }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updated = await res.json();
     setFeatures((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, done: !item.done } : item
-      )
+      prev.map((feature) => (feature._id === id ? updated : feature))
     );
   };
 
@@ -181,7 +187,7 @@ export const FeaturesSection = () => {
                     </motion.button>
 
                     <button
-                      onClick={() => toggleDone(index)}
+                      onClick={() => toggleDone(features[index]._id, item.done)}
                       className={`${
                         item.done ? "text-green-600" : "text-gray-400"
                       } hover:text-green-700 cursor-pointer`}
