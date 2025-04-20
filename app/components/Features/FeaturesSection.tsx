@@ -76,6 +76,15 @@ export const FeaturesSection = () => {
     );
   };
 
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      const res = await fetch("/api/features");
+      const data = await res.json();
+      setFeatures(data);
+    };
+    fetchIdeas();
+  }, []);
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4">💡 Features</h2>
