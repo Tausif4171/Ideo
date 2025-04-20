@@ -1,7 +1,7 @@
 import { connectToDB } from "@/app/lib/mongodb";
 import { Feature } from "@/app/lib/models/Feature";  
 
-export  async function POST(req: Request) {
+export async function POST(req: Request) {
   await connectToDB();
 
   const data = await req.json();
