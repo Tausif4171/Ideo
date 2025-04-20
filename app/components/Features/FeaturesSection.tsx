@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import TextareaAutosize from "react-textarea-autosize";
 
 type Item = {
+  _id: string;
   text: string;
   favorite: boolean;
   done: boolean;
@@ -50,12 +51,18 @@ export const FeaturesSection = () => {
     setEditText("");
   };
 
-  const updateFeature = () => {
-    if (editingIndex === null || !editText.trim()) return;
+  const updateFeature = async (id: string) => {
+    if (!editText.trim()) return;
+    const res = await fetch(`/api/features/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ text: editText }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updated = await res.json();
     setFeatures((prev) =>
-      prev.map((item, i) =>
-        i === editingIndex ? { ...item, text: editText } : item
-      )
+      prev.map((feature) => (feature._id === id ? updated : feature))
     );
     cancelEdit();
   };
@@ -124,7 +131,7 @@ export const FeaturesSection = () => {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={updateFeature}
+                      onClick={() => updateFeature(features[index]._id)}
                       className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                     >
                       Save
