@@ -15,6 +15,7 @@ export const FeaturesSection = () => {
   const [newFeature, setNewFeature] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
+  console.log(features);
 
   // CREATE
   const addFeature = async () => {
@@ -68,11 +69,17 @@ export const FeaturesSection = () => {
     cancelEdit();
   };
 
-  const toggleFavorite = (index: number) => {
+  const toggleFavorite = async (id: string, current: boolean) => {
+    const res = await fetch(`/api/features/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ favorite: !current }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updated = await res.json();
     setFeatures((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, favorite: !item.favorite } : item
-      )
+      prev.map((feature) => (feature._id === id ? updated : feature))
     );
   };
 
@@ -157,7 +164,9 @@ export const FeaturesSection = () => {
                   <div className="flex gap-2 ml-2">
                     {/* Animated Favorite Button */}
                     <motion.button
-                      onClick={() => toggleFavorite(index)}
+                      onClick={() =>
+                        toggleFavorite(features[index]._id, item.favorite)
+                      }
                       className={`text-xl cursor-pointer`}
                       whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
