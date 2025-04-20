@@ -78,12 +78,16 @@ export const IdeaSection = () => {
     setIdeas((prev) => prev.map((idea) => (idea._id === id ? updated : idea)));
   };
 
-  const toggleDone = (index: number) => {
-    setIdeas((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, done: !item.done } : item
-      )
-    );
+  const toggleDone = async (id: string, current: boolean) => {
+    const res = await fetch(`/api/ideas/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ done: !current }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const updated = await res.json();
+    setIdeas((prev) => prev.map((idea) => (idea._id === id ? updated : idea)));
   };
 
   useEffect(() => {
@@ -175,7 +179,7 @@ export const IdeaSection = () => {
                     </motion.button>
 
                     <button
-                      onClick={() => toggleDone(index)}
+                      onClick={() => toggleDone(ideas[index]._id, item.done)}
                       className={`${
                         item.done ? "text-green-600" : "text-gray-400"
                       } hover:text-green-700 cursor-pointer`}
