@@ -1,5 +1,5 @@
 import { connectToDB } from "@/app/lib/mongodb";
-import { Feature } from "@/app/lib/models/Feature";  
+import { Feature } from "@/app/lib/models/feature";  
 
 export async function POST(req: Request) {
   await connectToDB();
