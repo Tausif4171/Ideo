@@ -1,13 +1,29 @@
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/app/lib/mongodb";
-import { Idea } from "@/app/lib/models/Idea";  
+import { Idea } from "@/app/lib/models/Idea";
 
-// PATCH to update (edit text or toggle favorite/done)
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+// Updated PATCH handler
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   await connectToDB();
-  const updates = await req.json();
-  const updatedIdea = await Idea.findByIdAndUpdate(params.id, updates, { new: true });
-  return NextResponse.json(updatedIdea);
+  
+  try {
+    const updates = await req.json();
+    const updatedIdea = await Idea.findByIdAndUpdate(id, updates, { new: true });
+    
+    if (!updatedIdea) {
+      return NextResponse.json({ error: "Idea not found" }, { status: 404 });
+    }
+    return NextResponse.json(updatedIdea);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
 
 // DELETE an idea by ID
