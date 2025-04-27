@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/app/lib/mongodb";
 import { Feature } from "@/app/lib/models/Feature";
 
