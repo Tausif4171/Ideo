@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/app/lib/mongodb";
-import { Feature } from "@/app/lib/models/Feature";
+import { Feature } from "../../../lib/models/Feature";
 
 // Updated PATCH handler
 export async function PATCH(
