@@ -1,13 +1,29 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/app/lib/mongodb";
-import { Feature } from "@/app/lib/models/Feature";  
+import { Feature } from "@/app/lib/models/Feature";
 
-// PATCH to update (edit text or toggle favorite/done)
-export async  function PATCH(req:Request,{params}:{params:{id:string}}){
-    await connectToDB();
+// Updated PATCH handler
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  await connectToDB();
+  
+  try {
     const updates = await req.json();
-    const updatedFeature = await Feature.findByIdAndUpdate(params.id,updates,{new:true});
+    const updatedFeature = await Feature.findByIdAndUpdate(id, updates, { new: true });
+    
+    if (!updatedFeature) {
+      return NextResponse.json({ error: "Feature not found" }, { status: 404 });
+    }
     return NextResponse.json(updatedFeature);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
 
 // DELETE an feature by ID
