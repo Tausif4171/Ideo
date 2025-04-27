@@ -26,9 +26,29 @@ export async function PATCH(
   }
 }
 
-// DELETE an idea by ID
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+// Updated DELETE handler
+export async function DELETE(
+  _: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   await connectToDB();
-  await Idea.findByIdAndDelete(params.id);
-  return NextResponse.json({ message: "Idea deleted" });
+
+  try {
+    if (!id) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
+    
+    const deletedIdea = await Idea.findByIdAndDelete(id);
+    
+    if (!deletedIdea) {
+      return NextResponse.json({ error: "Idea not found" }, { status: 404 });
+    }
+    return NextResponse.json({ message: "Idea deleted successfully" });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
