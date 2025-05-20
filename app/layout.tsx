@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "🚀 Idea & Feature Tracker",
+  title: "Ideofy ✨",
   description:
     "✨ Easily track, favorite, and manage your best ideas and features!",
 };
