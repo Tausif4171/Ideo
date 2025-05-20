@@ -119,12 +119,12 @@ export const IdeaSection = () => {
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4">💡 Ideas</h2>
 
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col gap-2 mb-4">
         <TextareaAutosize
           value={newIdea}
           onChange={(e) => setNewIdea(e.target.value)}
           placeholder="Add a new idea..."
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg resize-none"
+          className="px-3 py-2 border border-gray-300 rounded-lg resize-none"
         />
         <button
           onClick={addIdea}
