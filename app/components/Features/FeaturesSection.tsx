@@ -154,91 +154,93 @@ export const FeaturesSection = () => {
       </div>
 
       {/* List */}
-      <ul className="space-y-3">
-        <AnimatePresence>
-          {visibleFeatures.map((item, index) => (
-            <motion.li
-              key={item._id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="flex justify-between items-start bg-gray-100 p-3 rounded-lg"
-            >
-              {editingIndex === index ? (
-                <div className="w-full flex flex-col gap-2">
-                  <TextareaAutosize
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    className="w-full px-3 py-1 border border-gray-400 rounded resize-none"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => updateFeature(item._id)}
-                      className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={cancelEdit}
-                      className="bg-gray-400 cursor-pointer text-white px-3 py-1 rounded hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <p
-                    className={`w-full ${
-                      item.done ? "line-through text-gray-500" : ""
-                    }`}
-                  >
-                    {item.text}
-                  </p>
-                  <div className="flex gap-2 ml-2">
-                    {/* Animated Favorite Button */}
-                    <motion.button
-                      onClick={() => toggleFavorite(item._id, item.favorite)}
-                      className={`text-xl cursor-pointer`}
-                      whileTap={{ scale: 1.2 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <span
-                        className={`transition ${
-                          item.favorite ? "text-yellow-500" : "text-gray-400"
-                        }`}
+      <div className="max-h-96 overflow-y-auto pr-1">
+        <ul className="space-y-3">
+          <AnimatePresence>
+            {visibleFeatures.map((item, index) => (
+              <motion.li
+                key={item._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex justify-between items-start bg-gray-100 p-3 rounded-lg"
+              >
+                {editingIndex === index ? (
+                  <div className="w-full flex flex-col gap-2">
+                    <TextareaAutosize
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      className="w-full px-3 py-1 border border-gray-400 rounded resize-none"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => updateFeature(item._id)}
+                        className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                       >
-                        {item.favorite ? "★" : "☆"}
-                      </span>
-                    </motion.button>
-
-                    <button
-                      onClick={() => toggleDone(item._id, item.done)}
-                      className={`${
-                        item.done ? "text-green-600" : "text-gray-400"
-                      } hover:text-green-700 cursor-pointer`}
-                    >
-                      ✔
-                    </button>
-                    <button
-                      onClick={() => startEdit(index)}
-                      className="text-blue-600 hover:text-blue-800 cursor-pointer"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      onClick={() => deleteFeature(item._id)}
-                      className="text-red-600 hover:text-red-800 cursor-pointer"
-                    >
-                      🗑️
-                    </button>
+                        Save
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="bg-gray-400 cursor-pointer text-white px-3 py-1 rounded hover:bg-gray-500"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </>
-              )}
-            </motion.li>
-          ))}
-        </AnimatePresence>
-      </ul>
+                ) : (
+                  <>
+                    <p
+                      className={`w-full ${
+                        item.done ? "line-through text-gray-500" : ""
+                      }`}
+                    >
+                      {item.text}
+                    </p>
+                    <div className="flex gap-2 ml-2">
+                      {/* Animated Favorite Button */}
+                      <motion.button
+                        onClick={() => toggleFavorite(item._id, item.favorite)}
+                        className={`text-xl cursor-pointer`}
+                        whileTap={{ scale: 1.2 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <span
+                          className={`transition ${
+                            item.favorite ? "text-yellow-500" : "text-gray-400"
+                          }`}
+                        >
+                          {item.favorite ? "★" : "☆"}
+                        </span>
+                      </motion.button>
+
+                      <button
+                        onClick={() => toggleDone(item._id, item.done)}
+                        className={`${
+                          item.done ? "text-green-600" : "text-gray-400"
+                        } hover:text-green-700 cursor-pointer`}
+                      >
+                        ✔
+                      </button>
+                      <button
+                        onClick={() => startEdit(index)}
+                        className="text-blue-600 hover:text-blue-800 cursor-pointer"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        onClick={() => deleteFeature(item._id)}
+                        className="text-red-600 hover:text-red-800 cursor-pointer"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </>
+                )}
+              </motion.li>
+            ))}
+          </AnimatePresence>
+        </ul>
+      </div>
       <div className="flex gap-2 mt-2">
         {canShowMore && (
           <button
