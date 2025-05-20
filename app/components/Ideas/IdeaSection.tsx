@@ -10,15 +10,14 @@ type Item = {
   done: boolean;
 };
 
-const ITEMS_PER_PAGE = 5; // You can adjust this value
+const ITEMS_PER_PAGE = 5;
 
 export const IdeaSection = () => {
   const [ideas, setIdeas] = useState<Item[]>([]);
   const [newIdea, setNewIdea] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
-  const [visibleIdeas, setVisibleIdeas] = useState<Item[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -29,16 +28,20 @@ export const IdeaSection = () => {
     fetchIdeas();
   }, []);
 
+  // Reset visibleCount if ideas shrink (e.g. after delete)
   useEffect(() => {
-    // Update visible ideas whenever the ideas or currentPage changes
-    const start = 0;
-    const end = currentPage * ITEMS_PER_PAGE;
-    setVisibleIdeas(ideas.slice(start, end));
-  }, [ideas, currentPage]);
+    if (visibleCount > ideas.length) {
+      setVisibleCount(ideas.length);
+    }
+    if (ideas.length <= ITEMS_PER_PAGE) {
+      setVisibleCount(ITEMS_PER_PAGE);
+    }
+  }, [ideas]);
+
+  const visibleIdeas = ideas.slice(0, visibleCount);
 
   const addIdea = async () => {
     if (!newIdea.trim()) return;
-
     const res = await fetch("/api/ideas", {
       method: "POST",
       body: JSON.stringify({
@@ -50,7 +53,6 @@ export const IdeaSection = () => {
         "Content-Type": "application/json",
       },
     });
-
     const data = await res.json();
     setIdeas((prev) => [...prev, data]);
     setNewIdea("");
@@ -63,7 +65,7 @@ export const IdeaSection = () => {
 
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditText(visibleIdeas[index].text); // Use visibleIdeas here
+    setEditText(visibleIdeas[index].text);
   };
 
   const cancelEdit = () => {
@@ -109,26 +111,34 @@ export const IdeaSection = () => {
     setIdeas((prev) => prev.map((idea) => (idea._id === id ? updated : idea)));
   };
 
-  const loadMore = () => {
-    setCurrentPage((prev) => prev + 1);
+  // Button logic
+  const canShowMore = visibleCount < ideas.length;
+  const canShowLess =
+    ideas.length > ITEMS_PER_PAGE && visibleCount >= ideas.length;
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, ideas.length));
   };
 
-  const hasMoreIdeas = visibleIdeas.length < ideas.length;
+  const handleShowLess = () => {
+    setVisibleCount(ITEMS_PER_PAGE);
+    setEditingIndex(null); // Optional: cancel edit if any
+  };
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4">💡 Ideas</h2>
 
-      <div className="flex flex-col gap-2 mb-4">
+      <div className="flex flex-col gap-2 mb-4 sm:flex-row">
         <TextareaAutosize
           value={newIdea}
           onChange={(e) => setNewIdea(e.target.value)}
           placeholder="Add a new idea..."
-          className="px-3 py-2 border border-gray-300 rounded-lg resize-none"
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg resize-none min-w-0"
         />
         <button
           onClick={addIdea}
-          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition w-20"
         >
           Add
         </button>
@@ -138,7 +148,7 @@ export const IdeaSection = () => {
         <AnimatePresence>
           {visibleIdeas.map((item, index) => (
             <motion.li
-              key={item._id} // Use a unique key
+              key={item._id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -176,7 +186,6 @@ export const IdeaSection = () => {
                     {item.text}
                   </p>
                   <div className="flex gap-2 ml-2">
-                    {/* Animated Favorite Button */}
                     <motion.button
                       onClick={() => toggleFavorite(item._id, item.favorite)}
                       className={`text-xl cursor-pointer`}
@@ -219,14 +228,24 @@ export const IdeaSection = () => {
           ))}
         </AnimatePresence>
       </ul>
-      {hasMoreIdeas && (
-        <button
-          onClick={loadMore}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Load More
-        </button>
-      )}
+      <div className="flex gap-2 mt-2">
+        {canShowMore && (
+          <button
+            onClick={handleShowMore}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Show More
+          </button>
+        )}
+        {canShowLess && (
+          <button
+            onClick={handleShowLess}
+            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+          >
+            Show Less
+          </button>
+        )}
+      </div>
     </div>
   );
 };
