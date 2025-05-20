@@ -138,16 +138,16 @@ export const FeaturesSection = () => {
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4">💡 Features</h2>
       {/* Input Field */}
-      <div className="flex flex-col gap-2 mb-4 sm:flex-row">
+      <div className="flex flex-col gap-2 mb-4">
         <TextareaAutosize
           value={newFeature}
           onChange={(e) => setNewFeature(e.target.value)}
           placeholder="Add a new feature..."
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg resize-none min-w-0"
+          className=" px-3 py-2 border border-gray-300 rounded-lg resize-none min-w-0"
         />
         <button
           onClick={addFeature}
-          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition w-20"
+          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition w-max"
         >
           Add
         </button>
