@@ -7,7 +7,7 @@ export default function Home() {
       <h1 className="text-3xl font-bold text-center">
         🚀 Idea & Feature Tracker
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6  items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <IdeaSection />
         <FeaturesSection />
       </div>
