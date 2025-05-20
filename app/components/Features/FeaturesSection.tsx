@@ -9,13 +9,30 @@ type Item = {
   favorite: boolean;
   done: boolean;
 };
+const ITEMS_PER_PAGE = 5; // You can adjust this value
 
 export const FeaturesSection = () => {
   const [features, setFeatures] = useState<Item[]>([]);
   const [newFeature, setNewFeature] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
-  console.log(features);
+  const [visibleFeatures, setVisibleFeatures] = useState<Item[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchFeatures = async () => {
+      const res = await fetch("/api/features");
+      const data = await res.json();
+      setFeatures(data);
+    };
+    fetchFeatures();
+  }, []);
+
+  useEffect(() => {
+    const start = 0;
+    const end = currentPage * ITEMS_PER_PAGE;
+    setVisibleFeatures(features.slice(start, end));
+  }, [features, currentPage]);
 
   // CREATE
   const addFeature = async () => {
@@ -39,7 +56,7 @@ export const FeaturesSection = () => {
   // UPDATE
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditText(features[index].text);
+    setEditText(visibleFeatures[index].text);
   };
 
   // DELETE
@@ -97,14 +114,11 @@ export const FeaturesSection = () => {
     );
   };
 
-  useEffect(() => {
-    const fetchFeatures = async () => {
-      const res = await fetch("/api/features");
-      const data = await res.json();
-      setFeatures(data);
-    };
-    fetchFeatures();
-  }, []);
+  const loadMore = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const hasMoreFeatures = visibleFeatures.length < features.length;
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
@@ -128,9 +142,9 @@ export const FeaturesSection = () => {
       {/* List */}
       <ul className="space-y-3">
         <AnimatePresence>
-          {features.map((item, index) => (
+          {visibleFeatures.map((item, index) => (
             <motion.li
-              key={index}
+              key={item._id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -145,7 +159,7 @@ export const FeaturesSection = () => {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={() => updateFeature(features[index]._id)}
+                      onClick={() => updateFeature(item._id)}
                       className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                     >
                       Save
@@ -170,9 +184,7 @@ export const FeaturesSection = () => {
                   <div className="flex gap-2 ml-2">
                     {/* Animated Favorite Button */}
                     <motion.button
-                      onClick={() =>
-                        toggleFavorite(features[index]._id, item.favorite)
-                      }
+                      onClick={() => toggleFavorite(item._id, item.favorite)}
                       className={`text-xl cursor-pointer`}
                       whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
@@ -187,7 +199,7 @@ export const FeaturesSection = () => {
                     </motion.button>
 
                     <button
-                      onClick={() => toggleDone(features[index]._id, item.done)}
+                      onClick={() => toggleDone(item._id, item.done)}
                       className={`${
                         item.done ? "text-green-600" : "text-gray-400"
                       } hover:text-green-700 cursor-pointer`}
@@ -201,7 +213,7 @@ export const FeaturesSection = () => {
                       ✏️
                     </button>
                     <button
-                      onClick={() => deleteFeature(features[index]._id)}
+                      onClick={() => deleteFeature(item._id)}
                       className="text-red-600 hover:text-red-800 cursor-pointer"
                     >
                       🗑️
@@ -213,6 +225,14 @@ export const FeaturesSection = () => {
           ))}
         </AnimatePresence>
       </ul>
+      {hasMoreFeatures && (
+        <button
+          onClick={loadMore}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Load More
+        </button>
+      )}
     </div>
   );
 };
