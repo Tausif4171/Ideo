@@ -154,7 +154,10 @@ export const FeaturesSection = () => {
       </div>
 
       {/* List */}
-      <div className="max-h-96 overflow-y-auto pr-1">
+      <div
+        className="max-h-96 overflow-y-auto pr-1"
+        style={{ scrollbarWidth: "thin" }}
+      >
         <ul className="space-y-3">
           <AnimatePresence>
             {visibleFeatures.map((item, index) => (

@@ -143,7 +143,10 @@ export const IdeaSection = () => {
           Add
         </button>
       </div>
-      <div className="max-h-96 overflow-y-auto pr-1">
+      <div
+        className="max-h-96 overflow-y-auto pr-1"
+        style={{ scrollbarWidth: "thin" }}
+      >
         {" "}
         {/* You can adjust max-h-96 */}
         <ul className="space-y-3">
