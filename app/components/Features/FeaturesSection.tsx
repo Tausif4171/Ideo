@@ -9,15 +9,15 @@ type Item = {
   favorite: boolean;
   done: boolean;
 };
-const ITEMS_PER_PAGE = 5; // You can adjust this value
+
+const ITEMS_PER_PAGE = 5;
 
 export const FeaturesSection = () => {
   const [features, setFeatures] = useState<Item[]>([]);
   const [newFeature, setNewFeature] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
-  const [visibleFeatures, setVisibleFeatures] = useState<Item[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   useEffect(() => {
     const fetchFeatures = async () => {
@@ -28,11 +28,17 @@ export const FeaturesSection = () => {
     fetchFeatures();
   }, []);
 
+  // Reset visibleCount if features shrink (e.g. after delete)
   useEffect(() => {
-    const start = 0;
-    const end = currentPage * ITEMS_PER_PAGE;
-    setVisibleFeatures(features.slice(start, end));
-  }, [features, currentPage]);
+    if (visibleCount > features.length) {
+      setVisibleCount(features.length);
+    }
+    if (features.length <= ITEMS_PER_PAGE) {
+      setVisibleCount(ITEMS_PER_PAGE);
+    }
+  }, [features]);
+
+  const visibleFeatures = features.slice(0, visibleCount);
 
   // CREATE
   const addFeature = async () => {
@@ -114,26 +120,34 @@ export const FeaturesSection = () => {
     );
   };
 
-  const loadMore = () => {
-    setCurrentPage((prev) => prev + 1);
+  // Button logic
+  const canShowMore = visibleCount < features.length;
+  const canShowLess =
+    features.length > ITEMS_PER_PAGE && visibleCount >= features.length;
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + ITEMS_PER_PAGE, features.length));
   };
 
-  const hasMoreFeatures = visibleFeatures.length < features.length;
+  const handleShowLess = () => {
+    setVisibleCount(ITEMS_PER_PAGE);
+    setEditingIndex(null); // Optional: cancel edit if any
+  };
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold mb-4">💡 Features</h2>
       {/* Input Field */}
-      <div className="flex flex-col gap-2 mb-4">
+      <div className="flex flex-col gap-2 mb-4 sm:flex-row">
         <TextareaAutosize
           value={newFeature}
           onChange={(e) => setNewFeature(e.target.value)}
           placeholder="Add a new feature..."
-          className=" px-3 py-2 border border-gray-300 rounded-lg resize-none"
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg resize-none min-w-0"
         />
         <button
           onClick={addFeature}
-          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition w-20"
         >
           Add
         </button>
@@ -225,14 +239,24 @@ export const FeaturesSection = () => {
           ))}
         </AnimatePresence>
       </ul>
-      {hasMoreFeatures && (
-        <button
-          onClick={loadMore}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Load More
-        </button>
-      )}
+      <div className="flex gap-2 mt-2">
+        {canShowMore && (
+          <button
+            onClick={handleShowMore}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Show More
+          </button>
+        )}
+        {canShowLess && (
+          <button
+            onClick={handleShowLess}
+            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+          >
+            Show Less
+          </button>
+        )}
+      </div>
     </div>
   );
 };
