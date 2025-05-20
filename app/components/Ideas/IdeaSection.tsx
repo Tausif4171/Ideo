@@ -10,12 +10,31 @@ type Item = {
   done: boolean;
 };
 
+const ITEMS_PER_PAGE = 5; // You can adjust this value
+
 export const IdeaSection = () => {
   const [ideas, setIdeas] = useState<Item[]>([]);
   const [newIdea, setNewIdea] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
-  console.log(ideas);
+  const [visibleIdeas, setVisibleIdeas] = useState<Item[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      const res = await fetch("/api/ideas");
+      const data = await res.json();
+      setIdeas(data);
+    };
+    fetchIdeas();
+  }, []);
+
+  useEffect(() => {
+    // Update visible ideas whenever the ideas or currentPage changes
+    const start = 0;
+    const end = currentPage * ITEMS_PER_PAGE;
+    setVisibleIdeas(ideas.slice(start, end));
+  }, [ideas, currentPage]);
 
   const addIdea = async () => {
     if (!newIdea.trim()) return;
@@ -44,7 +63,7 @@ export const IdeaSection = () => {
 
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditText(ideas[index].text);
+    setEditText(visibleIdeas[index].text); // Use visibleIdeas here
   };
 
   const cancelEdit = () => {
@@ -90,14 +109,11 @@ export const IdeaSection = () => {
     setIdeas((prev) => prev.map((idea) => (idea._id === id ? updated : idea)));
   };
 
-  useEffect(() => {
-    const fetchIdeas = async () => {
-      const res = await fetch("/api/ideas");
-      const data = await res.json();
-      setIdeas(data);
-    };
-    fetchIdeas();
-  }, []);
+  const loadMore = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const hasMoreIdeas = visibleIdeas.length < ideas.length;
 
   return (
     <div className="bg-white rounded-2xl p-6 shadow-lg">
@@ -120,9 +136,9 @@ export const IdeaSection = () => {
 
       <ul className="space-y-3">
         <AnimatePresence>
-          {ideas.map((item, index) => (
+          {visibleIdeas.map((item, index) => (
             <motion.li
-              key={index}
+              key={item._id} // Use a unique key
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -137,7 +153,7 @@ export const IdeaSection = () => {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={() => updateIdea(ideas[index]._id)}
+                      onClick={() => updateIdea(item._id)}
                       className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
                     >
                       Save
@@ -162,9 +178,7 @@ export const IdeaSection = () => {
                   <div className="flex gap-2 ml-2">
                     {/* Animated Favorite Button */}
                     <motion.button
-                      onClick={() =>
-                        toggleFavorite(ideas[index]._id, item.favorite)
-                      }
+                      onClick={() => toggleFavorite(item._id, item.favorite)}
                       className={`text-xl cursor-pointer`}
                       whileTap={{ scale: 1.2 }}
                       transition={{ type: "spring", stiffness: 300 }}
@@ -179,7 +193,7 @@ export const IdeaSection = () => {
                     </motion.button>
 
                     <button
-                      onClick={() => toggleDone(ideas[index]._id, item.done)}
+                      onClick={() => toggleDone(item._id, item.done)}
                       className={`${
                         item.done ? "text-green-600" : "text-gray-400"
                       } hover:text-green-700 cursor-pointer`}
@@ -193,7 +207,7 @@ export const IdeaSection = () => {
                       ✏️
                     </button>
                     <button
-                      onClick={() => deleteIdea(ideas[index]._id)}
+                      onClick={() => deleteIdea(item._id)}
                       className="text-red-600 hover:text-red-800 cursor-pointer"
                     >
                       🗑️
@@ -205,6 +219,14 @@ export const IdeaSection = () => {
           ))}
         </AnimatePresence>
       </ul>
+      {hasMoreIdeas && (
+        <button
+          onClick={loadMore}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Load More
+        </button>
+      )}
     </div>
   );
 };
