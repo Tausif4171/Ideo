@@ -147,10 +147,23 @@ export const IdeaSection = () => {
           className="px-3 py-2 border border-gray-300 rounded-lg resize-none min-w-0"
         />
         <button
-          onClick={addIdea}
-          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition w-max"
+          onClick={addIdea} // or addFeature in FeaturesSection
+          className="flex w-max items-center gap-2 bg-blue-600 text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-blue-700 active:scale-95 transition-all duration-150"
         >
           Add
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
         </button>
       </div>
       <div className="max-h-96 overflow-y-auto pr-1">
