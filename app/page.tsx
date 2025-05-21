@@ -3,7 +3,7 @@ import { FeaturesSection } from "./components/Features/FeaturesSection";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-cyan-100 space-y-6 p-6">
+    <main className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-cyan-100 space-y-9 px-6 py-9">
       <h1 className="text-3xl font-bold text-center">
         Idea & Feature Tracker 🚀
       </h1>
