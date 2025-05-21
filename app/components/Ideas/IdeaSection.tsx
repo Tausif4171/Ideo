@@ -156,7 +156,7 @@ export const IdeaSection = () => {
       <div className="max-h-96 overflow-y-auto pr-1">
         <ul className="space-y-3">
           {loading ? (
-            Array.from({ length: 3 }).map((_, i) => <IdeaSkeleton key={i} />)
+            Array.from({ length: 4 }).map((_, i) => <IdeaSkeleton key={i} />)
           ) : (
             <AnimatePresence>
               {visibleIdeas.map((item, index) => (
