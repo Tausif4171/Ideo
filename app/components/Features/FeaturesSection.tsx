@@ -154,7 +154,7 @@ export const FeaturesSection = () => {
         />
         <button
           onClick={addFeature} // or addFeature in FeaturesSection
-          className="flex w-max items-center gap-2 bg-blue-600 text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-blue-700 active:scale-95 transition-all duration-150"
+          className="flex w-max items-center gap-2 bg-cyan-500 text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-blue-700 active:scale-95 transition-all duration-150"
         >
           Add
           <svg
@@ -269,7 +269,7 @@ export const FeaturesSection = () => {
         {canShowMore && (
           <button
             onClick={handleShowMore}
-            className="flex cursor-pointer items-center gap-2 bg-blue-600 text-white font-medium px-6 py-2 rounded-full shadow hover:bg-blue-700 transition"
+            className="flex cursor-pointer items-center gap-2 bg-cyan-500 text-white font-medium px-6 py-2 rounded-full shadow hover:bg-blue-700 transition"
             aria-label="Show More"
           >
             <span>Show More</span>
