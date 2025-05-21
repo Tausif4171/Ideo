@@ -153,10 +153,23 @@ export const FeaturesSection = () => {
           className="px-3 py-2 border border-gray-300 rounded-lg resize-none min-w-0"
         />
         <button
-          onClick={addFeature}
-          className="bg-black cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition w-max"
+          onClick={addFeature} // or addFeature in FeaturesSection
+          className="flex w-max items-center gap-2 bg-blue-600 text-white font-semibold px-6 py-2 rounded-full shadow hover:bg-blue-700 active:scale-95 transition-all duration-150"
         >
           Add
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
         </button>
       </div>
       <div className="max-h-96 overflow-y-auto pr-1">
@@ -252,21 +265,49 @@ export const FeaturesSection = () => {
           )}
         </ul>
       </div>
-      <div className="flex gap-2 mt-2">
+      <div className="flex justify-center mt-4">
         {canShowMore && (
           <button
             onClick={handleShowMore}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            className="flex cursor-pointer items-center gap-2 bg-blue-600 text-white font-medium px-6 py-2 rounded-full shadow hover:bg-blue-700 transition"
+            aria-label="Show More"
           >
-            Show More
+            <span>Show More</span>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
           </button>
         )}
         {canShowLess && (
           <button
             onClick={handleShowLess}
-            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+            className="flex items-center gap-2 bg-gray-200 text-gray-800 font-medium px-6 py-2 rounded-full shadow hover:bg-gray-300 transition"
+            aria-label="Show Less"
           >
-            Show Less
+            <span>Show Less</span>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
           </button>
         )}
       </div>
