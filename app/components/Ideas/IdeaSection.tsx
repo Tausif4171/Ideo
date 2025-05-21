@@ -126,7 +126,7 @@ export const IdeaSection = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg">
+    <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200">
       <h2 className="text-2xl font-bold mb-4">💡 Ideas</h2>
 
       <div className="flex flex-col gap-2 mb-4 ">
