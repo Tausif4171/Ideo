@@ -166,7 +166,10 @@ export const IdeaSection = () => {
           </svg>
         </button>
       </div>
-      <div className="max-h-96 overflow-y-auto pr-1">
+      <div
+        className="max-h-96 overflow-y-auto pr-1"
+        style={{ scrollbarWidth: "thin" }}
+      >
         <ul className="space-y-3">
           {loading ? (
             Array.from({ length: 4 }).map((_, i) => <IdeaSkeleton key={i} />)
