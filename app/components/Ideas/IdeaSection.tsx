@@ -193,13 +193,13 @@ export const IdeaSection = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => updateIdea(item._id)}
-                          className="bg-green-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-green-700"
+                          className="flex items-center gap-2 text-[15px] bg-emerald-500 text-white font-semibold px-5 py-1 rounded-full shadow hover:bg-emerald-600 active:scale-95 transition-all duration-150"
                         >
                           Save
                         </button>
                         <button
                           onClick={cancelEdit}
-                          className="bg-gray-400 cursor-pointer text-white px-3 py-1 rounded hover:bg-gray-500"
+                          className="flex items-center gap-2 text-[15px] bg-gray-100 text-gray-700 font-semibold px-5 py-1 rounded-full border border-gray-300 shadow hover:bg-gray-200 active:scale-95 transition-all duration-150"
                         >
                           Cancel
                         </button>
