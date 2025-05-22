@@ -10,7 +10,7 @@ type Item = {
   done: boolean;
 };
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 3;
 
 function FeatureSkeleton() {
   return (
